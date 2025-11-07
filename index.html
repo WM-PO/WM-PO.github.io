@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <!-- TODO: Replace with your paper title and author names -->
+  <meta name="title" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+  <!-- TODO: Write a compelling 150-160 character description of your research -->
+  <meta name="description" content="We introduce World-Model-based Policy Optimization (WMPO), a principled framework for on-policy VLA RL without interacting with the real environment.">
+  <!-- TODO: Add 5-10 relevant keywords for your research area -->
+  <meta name="keywords" content="Vision-Language-Action Models (VLA), World Models, Reinforcement Learning">
+  <!-- TODO: List all authors -->
+  <meta name="author" content="Fangqi Zhu, Zhengyang Yan, Zicong Hong, Quanxin Shou, Xiao Ma, Song Guo">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="Hong Kong University of Science and Technology, ByteDance Seed">
+  <!-- TODO: Same as paper title above -->
+  <meta property="og:title" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+  <!-- TODO: Same as description above -->
+  <meta property="og:description" content="We introduce World-Model-based Policy Optimization (WMPO), a principled framework for on-policy VLA RL without interacting with the real environment.">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://WM-PO.github.io">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://WM-PO.github.io/static/images/introduction.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="Fangqi Zhu">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="Vision-Language-Action Models (VLA)">
+  <meta property="article:tag" content="World Models">
+  <meta property="article:tag" content="Reinforcement Learning">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <!-- TODO: Same as paper title above -->
+  <meta name="twitter:title" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+  <!-- TODO: Same as description above -->
+  <meta name="twitter:description" content="We introduce World-Model-based Policy Optimization (WMPO), a principled framework for on-policy VLA RL without interacting with the real environment.">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://WM-PO.github.io/static/images/introduction.png">
+  <meta name="twitter:image:alt" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="WMPO: World Model-based Policy Optimization for Vision-Language-Action Models">
+  <meta name="citation_author" content="Zhu, Fangqi">
+  <meta name="citation_author" content="Yan, Zhengyang">
+  <meta name="citation_author" content="Hong, Zicong">
+  <meta name="citation_author" content="Shou, Quanxin">
+  <meta name="citation_author" content="Ma, Xiao">
+  <meta name="citation_author" content="Guo, Song">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="ArXiv">
+  <meta name="citation_pdf_url" content="https://WM-PO.github.io/static/pdfs/WMPO_Seed.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>WMPO: World Model-based Policy Optimization for Vision-Language-Action Models</title>
+  
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.png">
+  <link rel="apple-touch-icon" href="static/images/favicon.png">
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+
+
+  
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "WMPO: World Model-based Policy Optimization for Vision-Language-Action Models",
+    "description": "We introduce World-Model-based Policy Optimization (WMPO), a principled framework for on-policy VLA RL without interacting with the real environment.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Fangqi Zhu",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Hong Kong University of Science and Technology"
+        }
+      },
+    ],
+    "datePublished": "2025-11-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ArXiv"
+    },
+    "url": "https://WM-PO.github.io",
+    "image": "https://WM-PO.github.io/static/images/introduction.png",
+    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
+    "abstract": "We introduce World-Model-based Policy Optimization (WMPO), a principled framework for on-policy VLA RL without interacting with the real environment.",
+    "citation": "BIBTEX_CITATION_HERE",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://WM-PO.github.io"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Vision-Language-Action Models (VLA)"
+      },
+      {
+        "@type": "Thing", 
+        "name": "World Models"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Hong Kong University of Science and Technology, ByteDance Seed",
+    "url": "https://WM-PO.github.io",
+    "logo": "https://WM-PO.github.io/static/images/favicon.ico",
+    "sameAs": [
+      "https://github.com/WM-PO"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- More Works Dropdown -->
+  <div class="more-works-container">
+    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+      <i class="fas fa-flask"></i>
+      More Works
+      <i class="fas fa-chevron-down dropdown-arrow"></i>
+    </button>
+    <div class="more-works-dropdown" id="moreWorksDropdown">
+      <div class="dropdown-header">
+        <h4>More Related Works from PEILab</h4>
+        <button class="close-btn" onclick="toggleMoreWorks()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="works-list">
+        <!-- TODO: Replace with your lab's related works -->
+        <a href="https://arxiv.org/pdf/2406.14540" class="work-item" target="_blank">
+          <div class="work-info">
+            <!-- TODO: Replace with actual paper title -->
+            <h5><strong>IRASim:</strong> Learning Interactive Real-Robot Action Simulators</h5>
+            <!-- TODO: Replace with brief description -->
+            <p>VLA, Robot Manipulation, World Models</p>
+            <!-- TODO: Replace with venue and year -->
+            <span class="work-venue">Accepted by ICCV 2025</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <!-- TODO: Add more related works or remove extra items -->
+        <!-- <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 2</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
+          <div class="work-info">
+            <h5>Paper Title 3</h5>
+            <p>Brief description of the work and its main contribution.</p>
+            <span class="work-venue">Conference/Journal 2023</span>
+          </div>
+          <i class="fas fa-external-link-alt"></i>
+        </a> -->
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+  <section class="hero" style="margin-top: -1.5rem;">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <!-- TODO: Replace with your paper title -->
+            <h1 class="title is-1 publication-title">WMPO: World Model-based Policy Optimization for Vision-Language-Action Models</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with your paper authors and their personal links -->
+              <span class="author-block">
+                <a href="https://fangqi-zhu.github.io/" target="_blank">Fangqi Zhu</a><sup>1, 2</sup>,</span>
+              <span class="author-block">
+                Zhengyang Yan<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://zicongs-homepage.webflow.io/" target="_blank">Zicong Hong</a><sup>1</sup>,</span>
+              <span class="author-block">
+                Quanxin Shou<sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://yusufma03.github.io/" target="_blank">Xiao Ma</a><sup>2*</sup>,</span>
+              <span class="author-block">
+                <a href="https://cse.hkust.edu.hk/~songguo/index.html" target="_blank">Song Guo</a><sup>1*</sup></span>
+            </div>  
+
+                  <div class="is-size-5 publication-authors" style="margin-top: -1.5rem;">
+                    <!-- TODO: Replace with your institution and conference/journal info -->
+                    <span class="author-block"><sup>1</sup>Hong Kong University of Science and Technology, <sup>2</sup>ByteDance Seed</span>
+                    <!-- TODO: Remove this line if no equal contribution -->
+                    <span class="eql-cntrb"><br><sup>*</sup>Corresponding Authors</span>
+                  </div>
+
+                  <div class="column has-text-centered" style="margin-top: -2rem;">
+                    <div class="publication-links">
+                         <!-- TODO: Update with your arXiv paper ID -->
+                      <span class="link-block">
+                        <a href="static/pdfs/WMPO_Seed.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- TODO: Add your supplementary material PDF or remove this section -->
+                    <!-- <span class="link-block">
+                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span> -->
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <span class="link-block">
+                    <a href="https://github.com/WM-PO/WMPO" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Update with your arXiv paper ID -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser video-->
+<section class="hero teaser" style="margin-top: -4rem;">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- TODO: Replace with your teaser video -->
+      <!-- <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata"> -->
+        <!-- TODO: Add your video file path here -->
+        <!-- <source src="static/videos/banner_video.mp4" type="video/mp4"> -->
+      <!-- </video> -->
+
+      <img src="static/images/introduction.png" alt="Introduction" style="margin-bottom: 1rem;" loading="lazy">
+      <!-- TODO: Replace with your video description -->
+      <h2 class="subtitle has-text-centered">
+        <strong>Figure 1.</strong>&ensp;Three different VLA training paradigms:  
+        (a) Imitation learning learns from human demonstrations but lacks the ability for learning from failures and self-correction;  
+        (b) Real-world RL improves policy through direct interaction but suffers from high sampling costs and difficulty in achieving on-policy RL;  
+        <strong>(c) WMPO pretrains a world model on large-scale robotic trajectories and fine-tunes it with limited policy behavior data, enabling sample-efficient on-policy RL for VLA without real-world interaction.</strong>
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- TODO: Replace with your paper abstract -->
+          <p>
+            Vision-Language-Action (VLA) models have shown strong potential for general-purpose robotic manipulation, but their reliance on expert demonstrations limits their ability to learn from failures and perform self-corrections. Reinforcement learning (RL) addresses these through self-improving interactions with the physical environment, but suffers from high sample complexity on real robots. We introduce <strong>World-Model-based Policy Optimization (WMPO)</strong>, a principled framework for on-policy VLA RL without interacting with the real environment. In contrast to widely used latent world models, WMPO focuses on pixel-based predictions that align the <em>"imagined"</em> trajectories with the VLA features pretrained with web-scale images. Crucially, WMPO enables the policy to perform on-policy GRPO that provides stronger performance than the often-used off-policy methods. Extensive experiments in both simulation and real-robot settings demonstrate that WMPO (i) substantially improves sample efficiency, (ii) achieves stronger overall performance, (iii) exhibits emergent behaviors such as self-correction, and (iv) demonstrates robust generalization and lifelong learning capabilities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Methodology -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Methodology</h2>
+        <div class="content has-text-justified">
+        <p>
+          WMPO starts from an initial state \(s_0\). The overall training procedure consists of three components: 
+          (1) <strong>Imagined Trajectory Generation</strong>, where policy model \(\pi_{\theta_{\text{old}}}\) and world model \(p_\phi\) interact alternately to generate a full imagined trajectory;
+          (2) <strong>Trajectory Sampling</strong>, where multiple trajectories are sampled and evaluated by the reward model \(R_\psi\); and
+          (3) <strong>Policy Update</strong>, where the policy parameters \(\theta\) are optimized via Equation 4.
+          This process is iteratively repeated throughout training.
+        </p>
+        </div>
+        <img src="static/images/method.png" style="margin-bottom: 0.5rem;" alt="Method" loading="lazy"/>
+        <h2 class="subtitle has-text-centered"><strong>Figure 2.</strong>&ensp;Illustration of Our Proposed <strong>World Model-based Policy Optimization (WMPO)</strong></h2>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper method -->
+
+
+<!-- Analysis -->
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Results and Analysis</h2>
+
+        <h3 class="title is-4">Comparison with GRPO and DPO</h3>
+        <div class="content has-text-justified">
+          <p>
+            We compare WMPO with two established RL algorithms, GRPO and DPO, both widely used for optimizing large language models. To ensure fairness, all methods are allocated the same real rollout budget \(P\) (i.e., the number of full real trajectories available for policy optimization). We consider both online and offline baselines: GRPO is implemented in an online setting, where the policy is updated directly from trajectories collected in the environment; DPO is implemented in an offline setting, where the base policy serves as the reference and trajectory pairs (success vs. failure) are constructed for optimization using the standard DPO loss. Unlike GRPO, which discards trajectories after each update, DPO can repeatedly reuse collected data, but it lacks the ability to update the policy online as WMPO does. Performance is reported as the task success rate (%).
+          </p>
+        </div>
+        <img src="static/images/tab_wmpo.png" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          <strong>Table 1.</strong>&ensp;
+          Comparison of policy optimization methods across four manipulation tasks in the Mimicgen simulation benchmark.
+          Results show that WMPO consistently outperforms both GRPO and DPO baselines under different budgets. 
+          <strong>As the rollout budget increases from \(128\) to \(1280\), WMPO continues to exhibit substantial improvements, highlighting both its data efficiency and scalability.</strong>
+        </h2>
+
+        <h3 class="title is-4" style="margin-top: 5rem;">Emergent Behavior of WMPO</h3>
+        <div class="content has-text-justified">
+          <p>
+            To better understand the source of WMPO's strong performance, we conduct a visual comparison of its test-time behavior against the base policy. We identify two emergent behaviors unique to our method: (1) the WMPO policy learns to self-correct, recovering from nearly failure states; and (2) the WMPO policy executes tasks more efficiently, as it rarely becomes "stuck" in suboptimal states.  
+          </p>
+        </div>
+        <img src="static/images/behavior.png" loading="lazy"/>
+        <h2 class="subtitle has-text-centered"><strong>Figure 3.</strong>&ensp;Behavior analysis of the <em>Square</em> task (inserting the square into the stick) shows that, compared with the base policy, <strong>WMPO demonstrates the ability to self-correct.</strong></h2>
+        <img src="static/images/length.png" loading="lazy" style="width: 80%;"/>
+        <h2 class="subtitle has-text-centered"><strong>Figure 5.</strong>&ensp;Relative average trajectory length of successful trials across different policies (Base Policy = \(100\%\)).</h2>
+
+        <h3 class="title is-4" style="margin-top: 5rem;">Generalization to Novel Tasks</h3>
+        <div class="content has-text-justified">
+          We evaluate the generalization ability of WMPO across three novel disruption scenarios (Figure 4), which systematically assess generalization under spatial, background, and texture shifts.
+          As shown in Table 2, WMPO consistently achieves the best performance across all disruption types. 
+          DPO attains modest improvements in the in-distribution setting compared to the base policy, but its performance degrades significantly under background and texture changes, suggesting reliance on spurious visual cues rather than transferable manipulation skills. 
+          GRPO exhibits performance similar to the base policy, and both are worse than WMPO across all disruption scenarios.
+          In contrast, WMPO, trained entirely in the world model, captures more generalizable strategies and maintains reliable performance across spatial, background, and texture variations.
+        </div>
+        <img src="static/images/generalization_a.png" loading="lazy" style="width: 30%; margin-right: 1rem;"/>
+        <img src="static/images/generalization_b.png" loading="lazy" style="width: 30%; margin-right: 1rem;"/>
+        <img src="static/images/generalization_c.png" loading="lazy" style="width: 30%;"/>
+        <h2 class="subtitle has-text-centered">
+          <strong>Figure 4.</strong>          
+          <strong>(a)</strong> For the <em>Square</em> task, we vary the stick’s position from fixed to a random position inside a rectangle.
+          <strong>(b)</strong> For the <em>StackThree</em> task, we substitute the tabletop background with a gray background.
+          <strong>(c)</strong> For the <em>ThreePieceAssembly</em> task, we substitute the red base with a dark wooden base.
+        </h2>
+        <img src="static/images/generalization_tab.png" loading="lazy" style="width: 50%;"/>
+        <h2 class="subtitle has-text-centered"><strong>Table 2.</strong>&ensp;We evaluate each policy in its corresponding disruption scenario and report the success rate (%)</h2>
+
+        <h3 class="title is-4" style="margin-top: 5rem;">Lifelong Learning</h3>
+        <div class="content has-text-justified">
+          We demonstrate that WMPO can continuously improve the performance of VLA by iteratively collecting real trajectories from the environment. Specifically, we iteratively collect \(P=128\) real trajectories, perform WMPO to optimize the policy, and then use the updated policy to collect another \(P\) real trajectories. We apply the same setting to the DPO baseline. To compare WMPO with an imitation learning-based policy using more expert demonstrations, we leverage \(300\), \(428\), and \(556\) expert trajectories to train the base policy as a reference. It is important to note that the base policy requires human-collected trajectories, whereas WMPO only relies on trajectories collected by the policy itself, making it more scalable. 
+          The results on the <em>StackThree</em> task, shown in Figure 6, demonstrate that WMPO achieves stable and substantial improvements over both baselines, whereas DPO fails to improve iteratively due to unstable training.
+        </div>
+        <img src="static/images/lifelong.png" loading="lazy" style="width: 50%;"/>
+        <h2 class="subtitle has-text-centered"><strong>Figure 6.</strong>&ensp;Lifelong learning results of WMPO and baselines. </h2>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper analysis -->
+
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h2 class="title is-3">Real-world Experiments</h2>
+      <div class="content has-text-justified">
+        In this part, we evaluate the challenging real-world manipulation task, <em>"Insert the square into the stick"</em>, where the clearance between the square and the stick is only 5mm to validate the effectiveness of WMPO. Using the Cobot Mobile ALOHA platform, we collect \(200\) high-quality expert demonstrations to fine-tune the OpenVLA-OFT model as the base policy. We then deploy this policy to collect an additional \(128\) trajectories, which are used to further fine-tune the world model and optimize the policy within it. For comparison, we also train an offline DPO policy using the same dataset. All models are evaluated under identical experimental conditions, and we report the average success rate over \(30\) trials.
+        <strong>The results show that the base policy, DPO, and WMPO achieve success rates of \(53\%\), \(60\%\), and \(70\%\), respectively, demonstrating the effectiveness of WMPO on real robots.</strong>
+      </div>
+      <div id="results-carousel" class="carousel results-carousel" style="margin-top: -2rem;">
+       <div class="item">
+        <!-- TODO: Replace with your research result images -->
+        <img src="static/images/real_success.png" alt="success" loading="lazy"/>
+        <!-- TODO: Replace with description of this result -->
+        <h2 class="subtitle has-text-centered">
+        <strong>Figure 7.</strong>&ensp;
+        <strong>Successful attempt</strong> on the fine-grained manipulation task <em>"Insert the square into the stick"</em>.
+        <strong>Despite never observing this trajectory during training, the world model accurately predicts the future evolution.</strong>
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/real_fail.png" alt="fail" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          <strong>Figure 8.</strong>&ensp;
+          <strong>Unsuccessful attempt</strong> on the fine-grained manipulation task <em>"Insert the square into the stick"</em>.
+          <strong>The world model successfully predicted failure cases.</strong>
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/real_wmfail.png" alt="wmfail" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          <strong>Figure 9.</strong>&ensp;
+          <strong>Example of a failure case.</strong> Although the predicted trajectory remains accurate until the final frame, the model fails to capture the square getting stuck in the stick due to subtle perturbations.
+       </h2>
+     </div>
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+<!-- Youtube video -->
+<!-- <section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container"> -->
+      <!-- Paper video. -->
+      <!-- <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video"> -->
+            <!-- TODO: Replace with your YouTube video ID -->
+            <!-- <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- End youtube video -->
+
+
+<!-- Video carousel -->
+<!-- <section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Another Carousel</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-video1"> -->
+          <!-- TODO: Add poster image for better preview -->
+          <!-- <video poster="" id="video1" controls muted loop height="100%" preload="metadata"> -->
+            <!-- Your video file here -->
+            <!-- <source src="static/videos/carousel1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video2"> -->
+          <!-- TODO: Add poster image for better preview -->
+          <!-- <video poster="" id="video2" controls muted loop height="100%" preload="metadata"> -->
+            <!-- Your video file here -->
+            <!-- <source src="static/videos/carousel2.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- End video carousel -->
+
+
+
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h2 class="title is-3">Read Our Paper For More Details</h2>
+
+      <!-- TODO: Replace with your poster PDF -->
+      <iframe  src="static/pdfs/WMPO_Seed.pdf" width="100%" height="550">
+          </iframe>
+        
+      </div>
+    </div>
+  </section>
+<!--End paper poster -->
+
+
+
+<!--BibTex citation -->
+  <section class="section hero is-light" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{WMPO2025,
+  title={WMPO: World Model-based Policy Optimization for Vision-Language-Action Models},
+  author={Fangqi, Zhu and Zhengyang, Yan and Zicong, Hong and Quanxin, Shou and Xiao, Ma and Song, Guo},
+  journal={ArXiv},
+  year={2025},
+  url={https://WM-PO.github.io}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
